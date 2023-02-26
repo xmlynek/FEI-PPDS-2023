@@ -1,6 +1,6 @@
 """This module contains an implementation of the bakery algorithm.
-The Bakery algorithm allows multiple (N) threads to access and work with shared resources one at a time,
-without interfering with each other.
+The Bakery algorithm allows multiple (N) threads to access and work with
+shared resources one at a time, without interfering with each other.
 """
 
 __author__ = "Filip Mlýnek, Tomáš Vavro"
@@ -17,43 +17,45 @@ inside: list[bool] = [False] * NUM_THREADS
 
 def lock(tid: int):
     """
-    Attempts to acquire the lock for thread with given thread id.
+    Attempts to acquire the lock for the thread with the given thread id.
 
     Args:
         tid: Thread id.
     """
     global nums, inside
 
-    # setting the entering flag and assign the highest number to thread with given thread id
+    # set the entering flag and assign the highest number to the thread
     inside[tid] = True
     nums[tid] = max(nums) + 1
     inside[tid] = False
 
-    # wait for all other threads with smaller numbers or with the same number and lower thread id
-    # finished entering or have a lower number
+    # wait for all other threads with smaller numbers or with the same number
+    # and lower thread id finished entering or have a lower number
     for j in range(NUM_THREADS):
         while inside[j]:
             continue
-        while (nums[j] != 0) and nums[j] < nums[tid] or (nums[j] == nums[tid] and j < tid):
+        while (nums[j] != 0 and
+               nums[j] < nums[tid] or (nums[j] == nums[tid] and j < tid)):
             continue
 
 
 def release_lock(tid: int):
     """
-    Releases the lock for thread with given thread id.
+    Releases the lock for the thread with the given thread id.
 
     Args:
         tid: Thread id.
     """
     global nums
 
-    # clear the number for thread with given thread id
+    # clear the number for the thread with the given thread id
     nums[tid] = 0
 
 
 def process(tid: int, num_runs: int):
     """
-    Simulates a process with a critical section that prints a message, including the current thread id.
+    Simulates a process with a critical section that prints a message,
+    including the current thread id.
 
     Args:
         tid: Thread id.
@@ -65,16 +67,17 @@ def process(tid: int, num_runs: int):
         # attempt to acquire the lock
         lock(tid)
 
-        # execute critical section
+        # execute a critical section
         print(f"Thread {tid} runs a complicated computation!")
         sleep(0.5)
 
-        # exit critical section with releasing the lock
+        # exit the critical section by releasing the lock
         release_lock(tid)
 
 
 if __name__ == '__main__':
     DEFAULT_NUM_RUNS = 5
 
-    threads = [Thread(process, i, DEFAULT_NUM_RUNS) for i in range(NUM_THREADS)]
+    threads = [Thread(process, i, DEFAULT_NUM_RUNS)
+               for i in range(NUM_THREADS)]
     [t.join() for t in threads]
