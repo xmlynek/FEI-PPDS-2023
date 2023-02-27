@@ -35,7 +35,7 @@ def lock(tid: int):
         while inside[j]:
             continue
         while (nums[j] != 0 and
-               nums[j] < nums[tid] or (nums[j] == nums[tid] and j < tid)):
+                nums[j] < nums[tid] or (nums[j] == nums[tid] and j < tid)):
             continue
 
 
@@ -76,8 +76,7 @@ def process(tid: int, num_runs: int):
 
 
 if __name__ == '__main__':
-    DEFAULT_NUM_RUNS = 5
+    NUM_RUNS = 5
 
-    threads = [Thread(process, i, DEFAULT_NUM_RUNS)
-               for i in range(NUM_THREADS)]
+    threads = [Thread(process, i, NUM_RUNS) for i in range(NUM_THREADS)]
     [t.join() for t in threads]
