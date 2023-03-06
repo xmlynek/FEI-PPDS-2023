@@ -3,6 +3,16 @@
 
 [![Python 3.10.6](https://img.shields.io/badge/python-3.10.6-blue.svg)](https://www.python.org/downloads/release/python-3106/)
 
+## Table of contents
+- [Assignment description](#assignment-description)
+- [Quick start](#quick-start)
+- [Description of the rendezvous synchronization technique](#description-of-the-rendezvous-synchronization-technique)
+- [Implementation of the barber shop with overtaking](#implementation-of-the-barber-shop-with-overtaking)
+  - [Sample output](#sample-output)
+- [Implementation of the barber shop without overtaking](#implementation-of-the-barber-shop-without-overtaking)
+  - [Sample output using FifoSemaphore](#sample-output-using-fifosemaphore)
+
+
 ## Assignment description
 
 The purpose of this assignment is to implement the Barber shop problem using the rendezvous synchronization technique.
@@ -96,8 +106,8 @@ The reason why `print` function is inside the critical section is that I want to
   shared.mutex.unlock()
   ```
 
-## Sample output
-This is the sample output using 5 customers and having only 3 seats available in the waiting room.
+### Sample output
+This is the sample output when using 5 customers and having only 3 seats available in the waiting room.
 Your output may be different.
 ```
 Customer 0 enters the waiting room
@@ -139,4 +149,53 @@ Customer 4 enters the waiting room
 Customer 3 enters the waiting room
 Customer 2 has is ready for another haircut
 Waiting room is full. Customer 2 takes emotional damage
+```
+
+## Implementation of the barber shop without overtaking
+As we could see in the [sample output](#sample-output) of the barber shop with overtaking, the customers were called
+in a different order than they arrived. To solve this issue, we can use queue to obtain the first-in, first-out (FIFO) 
+principle.
+
+Since we are using the `fei.ppds` library which has multiple different implementations of the Semaphore, we are going
+to use the `FifoSemaphore`. The `FifoSemaphore` implementation uses a `queue` object to keep track of the waiting
+threads so that adheres the FIFO principle.
+
+Implementation of this variant of the barber shop is in the [barber_shop_fifo.py](barber_shop_fifo.py) file. The only
+change compared to the barber shop with overtaking is using `FifoSemaphore` instead of `Semaphore` inside the Shared
+class.
+
+```python
+self.customer = FifoSemaphore(0)
+self.barber = FifoSemaphore(0)
+self.customer_done = FifoSemaphore(0)
+self.barber_done = FifoSemaphore(0)
+```
+
+### Sample output using FifoSemaphore
+This is the sample output when using 6 customers and 5 seats in the waiting room. As you can see, the order of the customers
+getting haircuts matches the order of the customers entering the waiting room.
+```
+Customer 0 enters the waiting room
+Customer 1 enters the waiting room
+Customer 2 enters the waiting room
+Customer 3 enters the waiting room
+Customer 4 enters the waiting room
+Waiting room is full. Customer 5 takes emotional damage
+Barber cuts hair
+Customer 0 gets haircut
+Barber cuts hair
+Customer 0 has left the barber shop
+Customer 1 gets haircut
+Customer 5 enters the waiting room
+Barber cuts hair
+Customer 1 has left the barber shop
+Customer 2 gets haircut
+Barber cuts hair
+Customer 2 has left the barber shop
+Customer 3 gets haircut
+Barber cuts hair
+Customer 3 has left the barber shop
+Customer 4 gets haircut
+Barber cuts hair
+Customer 5 gets haircut
 ```
