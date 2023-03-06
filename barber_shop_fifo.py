@@ -17,8 +17,8 @@ from fei.ppds import Mutex, Thread, FifoSemaphore, print
 from time import sleep
 from random import randint
 
-C = 6  # number of customers
-N = 5  # size of waiting room
+C = 5  # number of customers
+N = 3  # size of waiting room
 
 
 class Shared(object):
