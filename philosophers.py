@@ -1,4 +1,4 @@
-"""This module contains an implementation of the dinning philosophers problem.
+"""This module contains an implementation of the dining philosophers problem.
 
 This implementation involves categorizing the philosophers as either
 left-handed or right-handed in order to solve the problem.
@@ -9,7 +9,7 @@ link: https://youtu.be/8CF098hseDw.
 University: STU Slovak Technical University in Bratislava
 Faculty: FEI Faculty of Electrical Engineering and Information Technology
 Year: 2023
- """
+"""
 
 __authors__ = "Filip Mlýnek, Tomáš Vavro, Matúš Jókay"
 __email__ = "xmlynek@stuba.sk, xvavro@stuba.sk"
@@ -30,8 +30,7 @@ class Shared:
         forks: A list of the mutex locks that represent forks on the table.
         handedness_type: A list of integers representing the handedness type
             of the philosophers. A 0 represents right-handedness, and a 1
-            represents left-handedness. The resulting list contains both 0
-            and 1 values.
+            represents left-handedness.
     """
     def __init__(self):
         """Initialize an instance of Shared and print generated handedness
@@ -51,7 +50,7 @@ class Shared:
 
         Returns:
             List of integers (0,1) representing the handedness of the
-            philosophers.
+            philosophers. The resulting list contains both 0 and 1 values.
         """
         handedness_type = [0] * NUM_PHILOSOPHERS
         for i in range(0, NUM_PHILOSOPHERS):
