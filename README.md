@@ -7,15 +7,18 @@
 - [Quick start](#quick-start)
 - [Assignment description](#assignment-description)
 - [Implementation with a single cook](#implementation-with-a-single-cook)
-- [Sample output](#sample-output)
+  - [Sample output for implementation with the single cook](#sample-output-for-implementation-with-the-single-cook)
+- [Implementation with multiple cooks](#implementation-with-multiple-cooks)
+  - [Sample output for implementation with multiple cooks](#sample-output-for-implementation-with-multiple-cooks)
 
 
 ## Quick start
 Before running the script, perform the following steps:
 1. Set python interpreter version to 3.10.x.
 2. Install `fei.ppds` module (`pip install --upgrade fei.ppds`).
-3. Set the number of savages in `NUM_SAVAGES` variable to your desired value. Default value is 5.
-4. Set the number of portions inside the pot in `POT_SIZE` variable to your desired value. Default value is 3.
+3. Set the number of savages in the `NUM_SAVAGES` variable to your desired value. The default value is 5.
+4. Set the number of portions inside the pot in the `POT_SIZE` variable to your desired value. The default value is 3.
+5. In the solution with multiple cooks, set the number of cooks in the `NUM_COOKS` variable. The default value is 3.
 
 ## Assignment description
 The purpose of this assignment is to implement the modified dining savages problem.
@@ -121,8 +124,9 @@ continue to feast. Signalization is represented as a `Semaphore`.
 
 > Semaphores are a signalization mechanism that coordinate access to shared resources between multiple threads or processes. They maintain a count of the number of available resources, allowing threads or processes to wait or signal based on the current count. Semaphores provide a powerful way to achieve synchronization and avoid issues such as race conditions and priority inversion. [^3]
 
-## Sample output
-This is the sample output for 5 savages, 3 servings inside the pot, and the single cook.
+### Sample output for implementation with the single cook
+This is the sample output for implementation with the single cook having
+5 savages, 3 servings inside the pot, and the single cook.
 Note that your output may be different.
 ```
 Savage 0 joined the party. Savages waiting: 1
@@ -157,6 +161,80 @@ The savage 1 took a portion. Portions left: 1
 Savage 1 is feasting!
 Savage 1 joined the party. Savages waiting: 4
 Savage 3 joined the party. Savages waiting: 5
+ALL OF THE SAVAGES ARE TOGETHER. LET'S FEAST!
+```
+
+## Implementation with multiple cooks
+Implementation of this problem with multiple cooks is located in [hungry_savages_multiple_cooks.py](hungry_savages_multiple_cooks.py) file.
+There are slight modifications, such as new `cooks_mutex` and `cooks_finished`
+variables in `Shared` class.
+
+The biggest implementation change is in the `cook` function displayed below.
+Since multiple cooks are preparing food and trying to increment value
+in the `servings` variable, we need to provide integrity. That's why we used
+`cooks_mutex` to provide mutual exclusion.
+
+```python
+shared.empty_pot.wait()
+while True:
+    shared.cooks_mutex.lock()
+    if shared.servings == POT_SIZE:
+        # pot is full and the last cook thread signalizes it
+        shared.cooks_finished += 1
+        if shared.cooks_finished == NUM_COOKS:
+            shared.cooks_finished = 0
+            print(f"The pot is full again!")
+            shared.full_pot.signal()
+        shared.cooks_mutex.unlock()
+        break
+    else:
+        shared.servings += 1
+        print(f"Cook {i} adds a portion to the pot. "
+              f"Total portions: {shared.servings}/{POT_SIZE}")
+    shared.cooks_mutex.unlock()
+    sleep(0.25)
+```
+
+When the pot is full again, the last cook signals it, and the savages may continue
+to feast.
+
+### Sample output for implementation with multiple cooks
+This is the sample output for implementation with multiple cooks having
+5 savages, 3 servings inside the pot, and 3 cooks.
+Note that your output may be different.
+```
+Savage 0 joined the party. Savages waiting: 1
+Savage 1 joined the party. Savages waiting: 2
+Savage 2 joined the party. Savages waiting: 3
+Savage 3 joined the party. Savages waiting: 4
+Savage 4 joined the party. Savages waiting: 5
+ALL OF THE SAVAGES ARE TOGETHER. LET'S FEAST!
+The savage 4 is taking a portion
+The savage 4 took a portion. Portions left: 2
+Savage 4 is feasting!
+The savage 0 is taking a portion
+The savage 0 took a portion. Portions left: 1
+Savage 0 is feasting!
+The savage 3 is taking a portion
+The savage 3 took a portion. Portions left: 0
+Savage 3 is feasting!
+The savage 2 is taking a portion
+THE POT IS EMPTY. Wake up the cooks!
+The cooks start cooking!
+Cook 1 adds a portion to the pot. Total portions: 1/3
+Cook 2 adds a portion to the pot. Total portions: 2/3
+Cook 0 adds a portion to the pot. Total portions: 3/3
+Savage 0 joined the party. Savages waiting: 1
+Savage 4 joined the party. Savages waiting: 2
+Savage 3 joined the party. Savages waiting: 3
+The pot is full again!
+The savage 2 took a portion. Portions left: 2
+Savage 2 is feasting!
+The savage 1 is taking a portion
+The savage 1 took a portion. Portions left: 1
+Savage 1 is feasting!
+Savage 1 joined the party. Savages waiting: 4
+Savage 2 joined the party. Savages waiting: 5
 ALL OF THE SAVAGES ARE TOGETHER. LET'S FEAST!
 ```
 
