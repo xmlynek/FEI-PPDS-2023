@@ -92,7 +92,7 @@ def savage(i: int, shared: Shared):
 
 
 def cook(shared: Shared):
-    """The function executed by a savage thread.
+    """The function executed by a cook thread.
 
     Args:
         shared (Shared): The shared resources.
