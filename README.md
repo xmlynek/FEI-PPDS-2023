@@ -61,7 +61,7 @@ shared.barrier.wait()
 ***Barrier*** ensures that all the savages start feasting once they are all gathered.
 
 > Barrier is a synchronization mechanism that allows multiple threads or processes to coordinate and wait for each other to reach a specific point in their execution before proceeding further.
-> Once all threads have arrived at the barrier, they can then proceed past the barrier and continue their execution in parallel. [^1]
+> Once all threads have arrived at the barrier, they can then proceed past the barrier and continue their execution in parallel. [^1] [^2]
 
 ---
 
@@ -75,7 +75,7 @@ shared variable and multiple threads are trying to manipulate its value,
 we need to provide integrity. To provide integrity, we need to use
 ***mutual exclusion*** `servings_mutex`.
 
-> Mutex (short for mutual exclusion) is a synchronization mechanism that allows multiple threads to coordinate and safely access shared resources or critical sections of code. [^2]
+> Mutex (short for mutual exclusion) is a synchronization mechanism that allows multiple threads to coordinate and safely access shared resources or critical sections of code. [^1] [^3]
 
 ```python
 shared.servings_mutex.lock()
@@ -122,7 +122,7 @@ the food and adds the portions to the pot one at a time. When the pot is full,
 the cook ***signalizes*** that the pot is full again, which means, that the savages can
 continue to feast. Signalization is represented as a `Semaphore`.
 
-> Semaphores are a signalization mechanism that coordinate access to shared resources between multiple threads or processes. They maintain a count of the number of available resources, allowing threads or processes to wait or signal based on the current count. Semaphores provide a powerful way to achieve synchronization and avoid issues such as race conditions and priority inversion. [^3]
+> Semaphores are a signalization mechanism that coordinate access to shared resources between multiple threads or processes. They maintain a count of the number of available resources, allowing threads or processes to wait or signal based on the current count. Semaphores provide a powerful way to achieve synchronization and avoid issues such as race conditions and priority inversion. [^1] [^4]
 
 ### Sample output for implementation with the single cook
 This is the sample output for implementation with the single cook having
@@ -238,6 +238,8 @@ Savage 2 joined the party. Savages waiting: 5
 ALL OF THE SAVAGES ARE TOGETHER. LET'S FEAST!
 ```
 
-[^1]: https://medium.com/@jaydesai36/barrier-synchronization-in-threads-3c56f947047
-[^2]: https://www.techopedia.com/definition/25629/mutual-exclusion-mutex
-[^3]: https://en.wikipedia.org/wiki/Semaphore_(programming)
+[^1]: https://chat.openai.com
+[^2]: https://medium.com/@jaydesai36/barrier-synchronization-in-threads-3c56f947047
+[^3]: https://www.techopedia.com/definition/25629/mutual-exclusion-mutex
+[^4]: https://en.wikipedia.org/wiki/Semaphore_(programming)
+
