@@ -142,7 +142,7 @@ philosophers problem. It uses a semaphore to represent a waiter who controls
 the access to the forks. Each philosopher needs a permission from the waiter 
 to sit down. The waiter allows `NUM_PHILOSOPHERS - 1` philosophers to sit down
 and start eating. In our scenario, with 5 philosophers, it means that 4 philosophers
-will be eating and 1 of them will be a waiter. For more details, see the
+will be trying to eat and 1 of them will be a waiter. For more details, see the
 [implementation using waiter](https://github.com/tj314/ppds-2023-cvicenia/blob/master/seminar4/04_philosophers.py).
 
 As mentioned above, the solution using the waiter uses a central semaphore to control
